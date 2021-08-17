@@ -47,6 +47,8 @@ RUN echo "source activate cusignal" >> ${HOME}/.bashrc
 #RUN pip install cupy --no-cache-dir -vvv
 
 COPY ./cusignal ${HOME}/cusignal/
+#COPY ./build_cusignal.sh ~/cusignal/build.sh
+# Hakcing for gpu capability fix
 ENV PATH=/home/cusignal/mambaforge/envs/cusignal/bin:${PATH}
 RUN ./cusignal/build.sh -v 
 
