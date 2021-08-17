@@ -11,7 +11,6 @@ RUN update-ca-certificates
 ENV UNAME cusignal
 ENV HOME /home/${UNAME}
 ENV PATH="${HOME}/mambaforge/bin:${PATH}"
-ARG PATH="${HOME}/mambaforge/bin:${PATH}"
 ENV PATH="/usr/local/cuda/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 ENV CUDA_HOME="/usr/local/cuda"
@@ -40,16 +39,15 @@ RUN mkdir ${HOME}/.conda \
 COPY ./cusignal_jetson_base.yml ${HOME}
 RUN conda env create --file cusignal_jetson_base.yml
 RUN conda init bash
-SHELL ["/bin/bash", "-c"]
-RUN echo ". activate cusignal" >> ${HOME}/.bashrc && . ${HOME}/.bashrc
-
+#SHELL ["/bin/bash", "-c"]
+#RUN echo ". activate cusignal" >> ${HOME}/.bashrc && . ${HOME}/.bashrc
+RUN echo "source activate cusignal" >> ${HOME}/.bashrc
 
 #RUN git clone https://github.com/rapidsai/cusignal
 #RUN pip install cupy --no-cache-dir -vvv
-#WORKDIR /app/cupy
-#RUN pip install .
-#WORKDIR /app/cusignal/
-#RUN ./cusignal/build.sh
-COPY ./cusignal ${HOME}
-ENV PATH="${HOME}/cusignal/mambaforge/envs/cusignal/bin:${PATH}"
-SHELL ["/bin/bash", "-c", "conda activate cusignal", "&&", "./build.sh -v"]
+
+COPY ./cusignal ${HOME}/cusignal/
+ENV PATH=/home/cusignal/mambaforge/envs/cusignal/bin:${PATH}
+RUN ./cusignal/build.sh -v 
+
+
