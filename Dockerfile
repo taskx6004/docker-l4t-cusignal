@@ -80,31 +80,21 @@ ENV PATH="${HOME}/mambaforge/envs/${UNAME}bin:${PATH}"
 
 #
 #
-# Copy Package repos
-COPY ./cusignal/ ${HOME}/cusignal
+# install cusigal
 COPY ./cupy/ ${HOME}/cupy
-
-# choose GPU capability (save build time)
+# choose GPU capability (only works for building cupy)
 ENV CUPY_NVCC_GENERATE_CODE="arch=compute_72,code=sm_72"
-
 RUN conda run -n ${UNAME} pip install -vvv ${HOME}/cupy/
 
-#RUN bash -c "pip install cupy=9.3.0"
-#ENV PATH=/home/cusignal/mambaforge/envs/cusignal/bin:${PATH}
-#RUN conda info && /bin/bash && cd ~/cupy/ && pip --use-feature=in-tree-build install .
 
-
-#RUN conda init bash
-#RUN echo "source activate cusignal" >> ${HOME}/.bashrc && source ${HOME}/.bashrc
-#RUN ["/home/cusignal/cusignal/build.sh",  "-v"]
-
+#
+#
 # Install cusignal
+COPY ./cusignal/ ${HOME}/cusignal
 #RUN git clone https://github.com/rapidsai/cusignal
-#SHELL ["/bin/bash", "-c"]
-#RUN ["conda", "activate", "cusignal"]
-#RUN [ "conda", "run", "-n", "cusignal", "/bin/bash", "build.sh", "-v" ]
-#COPY ./build_cusignal.sh ~/cusignal/build.sh
-# Hakcing for gpu capability fix
-#RUN ./cusignal/build.sh -v 
+RUN conda run -n ${UNAME} ${HOME}/cusignal/build.sh -v
 
-
+#
+#
+# Done!
+CMD ["/bin/bash"]

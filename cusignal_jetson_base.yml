@@ -9,7 +9,10 @@ dependencies:
   - pip=21.1.3
   - numba
   - numpy==1.21.2
+  - scipy
   - fastrlock==0.6
+  - pytest
+  - pytest-benchmark
 
 
 
